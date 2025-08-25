@@ -14,11 +14,20 @@ function Users() {
         .catch(err => console.log(err)
         )
     }, [])
+
+    const handleDelete = (id) => {
+        axios.delete('http://localhost:3001/deleteUser/' +id)
+        .then(res => {console.log(res)
+            window.location.reload()
+        })
+        .catch(err => console.log(err))
+        }
   return (
     <div className='d-flex vh-100 bg-primary justify-content-center align-items-center'>
-        <div className='w-50 bg-white rounded p-3'>
-            <Link to="/create" className='btn btn-success'>Add +</Link>
-            <table className='table'>
+        <div className='w-45 bg-white rounded p-3'>
+            <Link to="/create" className='btn btn-success mb-3'>Add +</Link>
+            <div className='table-responsive'>
+            <table className='table table-striped table-hover table-bordered align-middle'>
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -30,20 +39,22 @@ function Users() {
                 <tbody>
                     {
                         users.map((user) => {
-                           return <tr>
+                           return <tr key={user._id}>
                                 <td>{user.name}</td>
                                 <td>{user.email}</td>
                                 <td>{user.age}</td>
                                 <td>
-                                    <Link to={`/update/${user._id}`} className='btn btn-success'>Update</Link>
-
-                                    <button className='btn btn-danger'>Delete</button>
+                                    <div className='d-flex gap-2'>
+                                        <Link to={`/update/${user._id}`} className='btn btn-success'>Update</Link>
+                                        <button className='btn btn-danger' onClick={(e) => handleDelete(user._id)}>Delete</button>
+                                    </div>
                                 </td>
                             </tr>
                         })
                     }
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
   )
